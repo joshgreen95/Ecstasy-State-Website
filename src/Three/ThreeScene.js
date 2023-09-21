@@ -8,6 +8,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 //Logic
 import { PageManager } from '../React/logic/PageManager.js';
+import { GeneratePointsMesh, UpdatePoints } from './logic/GeneratePointsMesh.js';
 
 export default function ThreeScene() {
     useEffect(() => {
@@ -32,7 +33,7 @@ export default function ThreeScene() {
  */
         const scene = new THREE.Scene();
         scene.background = PageManager.backgroundColor;
-
+        const clock = new THREE.Clock();
 /**
  * Camera
  */
@@ -49,13 +50,9 @@ export default function ThreeScene() {
 /**
  *  Debug Square
  */
-        const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const cubeMaterial = new THREE.MeshToonMaterial({color: 0xff0000});
-        const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        scene.add(cubeMesh);
-        cubeMesh.position.x = 2;
-        scene.add(new THREE.PointLight(0xffffff, 0.5));
-
+        const points = GeneratePointsMesh(5, 0.1);
+        scene.add(points);
+        console.log(points);
 /**
  *  Listeners
  */
@@ -77,11 +74,11 @@ export default function ThreeScene() {
         function Tick() {
             requestAnimationFrame(Tick);
 
+            UpdatePoints(points, clock.getElapsedTime);
             controls.update();
 
             renderer.render(scene, camera);
         }
-
         Tick(); 
     });
 
