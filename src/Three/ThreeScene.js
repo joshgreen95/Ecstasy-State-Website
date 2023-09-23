@@ -10,6 +10,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { PageManager } from '../React/logic/PageManager.js';
 import { GeneratePointsMesh, UpdatePoints } from './logic/GeneratePointsMesh.js';
 
+//Songs
+import subway from '../Music/subway.mp3';
+
 export default function ThreeScene() {
     useEffect(() => {
 /***
@@ -43,6 +46,20 @@ export default function ThreeScene() {
         scene.add(camera);
 
 /**
+ *  Sound
+ */
+        const listener = new THREE.AudioListener();
+        const music = new THREE.PositionalAudio(listener);
+
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load(subway, ((buffer) => {
+            music.setBuffer(buffer);
+        }));
+
+        const audioAnalyzer = new THREE.AudioAnalyser(music);
+        let audioFrequency = null;
+
+/**
  * Debug Controls
  */
         const controls = new OrbitControls(camera, renderer.domElement);
@@ -50,7 +67,7 @@ export default function ThreeScene() {
 /**
  *  Debug Square
  */
-        const points = GeneratePointsMesh(5, 0.1);
+        const points = GeneratePointsMesh(50, 0.1, 1);
         scene.add(points);
         console.log(points);
 /**
@@ -65,6 +82,11 @@ export default function ThreeScene() {
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));    
         }
 
+        function leftClick(){
+            music.play();
+        }
+
+        window.addEventListener('click', leftClick);
         window.addEventListener('resize', Resize);
 
 
@@ -73,8 +95,11 @@ export default function ThreeScene() {
  */
         function Tick() {
             requestAnimationFrame(Tick);
+            
+            audioFrequency = audioAnalyzer.getAverageFrequency();
 
-            UpdatePoints(points, clock.getElapsedTime);
+            UpdatePoints(points, clock.getElapsedTime(), audioFrequency, 100);
+
             controls.update();
 
             renderer.render(scene, camera);
