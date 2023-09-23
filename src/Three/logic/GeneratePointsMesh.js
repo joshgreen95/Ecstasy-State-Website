@@ -26,25 +26,35 @@ function GeneratePointsMesh(ammount, scale, seperation){
     
     const material = new THREE.PointsMaterial({ color: 0xffffff});
     material.size = scale;
+    material.tags = {};
+    material.tags.scale = scale;
+    material.tags.seperation = seperation;
+    material.tags.ammount = ammount;
 
     const points = new THREE.Points(geometry, material);
-
+    console.log(points);
     return points;
 }
 
-function UpdatePoints(points, time, audioFrequency, dampening){
-  
-
+function UpdatePoints(points, time, audioFrequency, amplitudeDampening, phaseDampening){
     const positions = points.geometry.attributes.position.array;
-    const scales = points.geometry.attributes.scale.array;
 
-    const amplitude = audioFrequency * dampening;
-    let ammount = Math.sqrt(positions.length);
+    const amplitude = audioFrequency * amplitudeDampening;
+    const phase = time * phaseDampening;
 
+    const ammount = points.material.tags.ammount;
+    const scale = points.material.tags.scale;
+    const seperation = points.material.tags.seperation;
+
+    const halfAmmount = ammount / 2;
     let i = 0; 
     for (let ix = 0; ix < ammount; ix++){
         for (let iy = 0; iy < ammount; iy++){
-            positions[i + 1] = Math.sin((ix + iy)) * amplitude;
+            if(audioFrequency === 0){ continue; }
+
+            let distanceFromCenter = Math.sqrt(Math.pow(ix - halfAmmount, 2) + Math.pow(iy - halfAmmount, 2));
+
+            positions[i + 1] = amplitude * Math.sin(phase * distanceFromCenter) * Math.exp(-amplitudeDampening * distanceFromCenter);
             i += 3;
         }
     }

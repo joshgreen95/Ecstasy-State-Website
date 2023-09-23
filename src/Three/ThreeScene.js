@@ -40,10 +40,11 @@ export default function ThreeScene() {
 /**
  * Camera
  */
-        const cameraFOV = 90;
+        const cameraFOV = 75;
         const camera = new THREE.PerspectiveCamera(cameraFOV, sizes.width / sizes.height, 0.1, 1000);
         camera.position.z = -5;
         scene.add(camera);
+        scene.add(new THREE.AxesHelper(22));
 
 /**
  *  Sound
@@ -67,7 +68,7 @@ export default function ThreeScene() {
 /**
  *  Debug Square
  */
-        const points = GeneratePointsMesh(50, 0.1, 1);
+        const points = GeneratePointsMesh(75, 0.02, 0.3);
         scene.add(points);
         console.log(points);
 /**
@@ -98,7 +99,7 @@ export default function ThreeScene() {
             
             audioFrequency = audioAnalyzer.getAverageFrequency();
 
-            UpdatePoints(points, clock.getElapsedTime(), audioFrequency, 100);
+            UpdatePoints(points, clock.getElapsedTime(), audioFrequency, 0.01, 0.5);
 
             controls.update();
 
