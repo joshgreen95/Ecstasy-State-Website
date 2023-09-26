@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 function GeneratePointsMesh(ammount, scale, seperation){
+    const textureLoader = new THREE.TextureLoader();
     const quantity = ammount * ammount;
     
     let positions = new Float32Array(quantity * 3);
@@ -24,15 +25,15 @@ function GeneratePointsMesh(ammount, scale, seperation){
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute('scale', new THREE.Float32BufferAttribute(scales));
     
-    const material = new THREE.PointsMaterial({ color: 0xffffff});
+    const material = new THREE.PointsMaterial({ color: 0xffffff });
     material.size = scale;
     material.tags = {};
     material.tags.scale = scale;
     material.tags.seperation = seperation;
     material.tags.ammount = ammount;
 
+
     const points = new THREE.Points(geometry, material);
-    console.log(points);
     return points;
 }
 
@@ -43,10 +44,9 @@ function UpdatePoints(points, time, audioFrequency, amplitudeDampening, phaseDam
     const phase = time * phaseDampening;
 
     const ammount = points.material.tags.ammount;
-    const scale = points.material.tags.scale;
-    const seperation = points.material.tags.seperation;
 
     const halfAmmount = ammount / 2;
+    
     let i = 0; 
     for (let ix = 0; ix < ammount; ix++){
         for (let iy = 0; iy < ammount; iy++){

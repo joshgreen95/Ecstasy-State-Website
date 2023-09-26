@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { useState, useEffect } from 'react';
 //THREE
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { TextureLoader } from 'three';
 
 //Logic
 import { PageManager } from '../React/logic/PageManager.js';
@@ -12,6 +13,9 @@ import { GeneratePointsMesh, UpdatePoints } from './logic/GeneratePointsMesh.js'
 
 //Songs
 import subway from '../Music/subway.mp3';
+
+//Textures
+import particleAlphaMap from './Textures/Particles/1.png';
 
 export default function ThreeScene() {
     useEffect(() => {
@@ -37,6 +41,13 @@ export default function ThreeScene() {
         const scene = new THREE.Scene();
         scene.background = PageManager.backgroundColor;
         const clock = new THREE.Clock();
+
+
+/**
+ * Textures
+ */
+        const textureLoader = new THREE.TextureLoader();
+        
 /**
  * Camera
  */
@@ -44,7 +55,6 @@ export default function ThreeScene() {
         const camera = new THREE.PerspectiveCamera(cameraFOV, sizes.width / sizes.height, 0.1, 1000);
         camera.position.z = -5;
         scene.add(camera);
-        scene.add(new THREE.AxesHelper(22));
 
 /**
  *  Sound
@@ -66,11 +76,14 @@ export default function ThreeScene() {
         const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
- *  Debug Square
+ *  Points
  */
-        const points = GeneratePointsMesh(75, 0.02, 0.3);
-        scene.add(points);
-        console.log(points);
+        
+        const points = GeneratePointsMesh(150, 0.02, 0.1);
+        textureLoader.load(particleAlphaMap, ((texture) => {
+            points.material.map = texture;
+            scene.add(points);
+        }))
 /**
  *  Listeners
  */
@@ -98,8 +111,10 @@ export default function ThreeScene() {
             requestAnimationFrame(Tick);
             
             audioFrequency = audioAnalyzer.getAverageFrequency();
-
-            UpdatePoints(points, clock.getElapsedTime(), audioFrequency, 0.01, 0.5);
+            
+            if(points !== null && points.geometry !== null){
+                UpdatePoints(points, clock.getElapsedTime(), audioFrequency, 0.05, 0.5);
+            }
 
             controls.update();
 
