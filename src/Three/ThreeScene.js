@@ -3,16 +3,15 @@ import React from 'react';
 import * as THREE from 'three';
 //React
 import { useState, useEffect } from 'react';
+
 //THREE
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TextureLoader } from 'three';
 
 //Logic
 import { PageManager } from '../React/logic/PageManager.js';
+import { SoundManager } from '../Music/Logic/SoundManager.js';
 import { GeneratePointsMesh, UpdatePoints } from './logic/GeneratePointsMesh.js';
-
-//Songs
-import subway from '../Music/subway.mp3';
 
 //Textures
 import particleAlphaMap from './Textures/Particles/1.png';
@@ -59,15 +58,8 @@ export default function ThreeScene() {
 /**
  *  Sound
  */
-        const listener = new THREE.AudioListener();
-        const music = new THREE.PositionalAudio(listener);
+        const soundManager = new SoundManager();
 
-        const audioLoader = new THREE.AudioLoader();
-        audioLoader.load(subway, ((buffer) => {
-            music.setBuffer(buffer);
-        }));
-
-        const audioAnalyzer = new THREE.AudioAnalyser(music);
         let audioFrequency = null;
 
 /**
@@ -97,12 +89,16 @@ export default function ThreeScene() {
         }
 
         function leftClick(){
-            music.play();
+            soundManager.PlayTrack(0);
+        }
+
+        function keyPress(){
+            soundManager.Skip();
         }
 
         window.addEventListener('click', leftClick);
         window.addEventListener('resize', Resize);
-
+        window.addEventListener('keypress', keyPress);
 
 /**
  *  Loop
@@ -110,7 +106,7 @@ export default function ThreeScene() {
         function Tick() {
             requestAnimationFrame(Tick);
             
-            audioFrequency = audioAnalyzer.getAverageFrequency();
+            audioFrequency = soundManager.GetAudioFrequency();
             
             if(points !== null && points.geometry !== null){
                 UpdatePoints(points, clock.getElapsedTime(), audioFrequency, 0.05, 0.5);
