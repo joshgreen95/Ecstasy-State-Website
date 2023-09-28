@@ -2,11 +2,10 @@
 import React from 'react';
 import * as THREE from 'three';
 //React
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 //THREE
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { TextureLoader } from 'three';
 
 //Logic
 import { PageManager } from '../React/logic/PageManager.js';
@@ -41,7 +40,6 @@ export default function ThreeScene() {
         scene.background = PageManager.backgroundColor;
         const clock = new THREE.Clock();
 
-
 /**
  * Textures
  */
@@ -58,10 +56,8 @@ export default function ThreeScene() {
 /**
  *  Sound
  */
-        const soundManager = new SoundManager();
-
+        SoundManager.Initialize();
         let audioFrequency = null;
-
 /**
  * Debug Controls
  */
@@ -70,8 +66,8 @@ export default function ThreeScene() {
 /**
  *  Points
  */
-        
         const points = GeneratePointsMesh(150, 0.02, 0.1);
+        
         textureLoader.load(particleAlphaMap, ((texture) => {
             points.material.map = texture;
             scene.add(points);
@@ -89,11 +85,11 @@ export default function ThreeScene() {
         }
 
         function leftClick(){
-            soundManager.PlayTrack(0);
+            SoundManager.PlayTrack(0);
         }
 
         function keyPress(){
-            soundManager.Skip();
+            SoundManager.Skip();
         }
 
         window.addEventListener('click', leftClick);
@@ -106,7 +102,7 @@ export default function ThreeScene() {
         function Tick() {
             requestAnimationFrame(Tick);
             
-            audioFrequency = soundManager.GetAudioFrequency();
+            audioFrequency = SoundManager.GetAudioFrequency();
             
             if(points !== null && points.geometry !== null){
                 UpdatePoints(points, clock.getElapsedTime(), audioFrequency, 0.05, 0.5);
@@ -118,10 +114,6 @@ export default function ThreeScene() {
         }
         Tick(); 
     });
-
-
-
-
 
     return (
         <>
