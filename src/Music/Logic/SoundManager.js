@@ -18,10 +18,14 @@ const SoundManager = {
     thiscurrentTrackName: null,
 
     lastVolume: null,
+    defaultVolume: 0.5,
 
     Initialize(){  
         this.listener = new THREE.AudioListener();
+        
         this.music = new THREE.Audio(this.listener);
+        this.music.setVolume(this.defaultVolume);
+
         this.audioLoader = new THREE.AudioLoader();
         this.audioAnalyzer = new THREE.AudioAnalyser(this.music);
         this.currentTrackName = this.tracklist[this.currentlyPlayingID ? this.currentlyPlayingID : 0];
@@ -66,6 +70,11 @@ const SoundManager = {
 
     Mute(){ 
         this.lastVolume = this.music.getVolume();
+
+        if(this.lastVolume === 0){
+            this.lastVolume = this.defaultVolume;
+        } 
+        
         this.music.setVolume(0);
         
         console.log(`LastVolume : ${this.lastVolume}, Current Volume: ${this.music.getVolume()}`);
@@ -73,7 +82,7 @@ const SoundManager = {
 
     UnMute(){
         this.music.setVolume(this.lastVolume);
-        this.lastVolume = 0;
+
         console.log(`LastVolume : ${this.lastVolume}, Current Volume: ${this.music.getVolume()}`);
     },
 
@@ -81,8 +90,9 @@ const SoundManager = {
         return this.audioAnalyzer.getAverageFrequency();
     },
 
-    SetGain(gain){
-        this.music.gain = gain;
+    SetVolume(volume){
+        console.log(volume);
+        //this.music.setVolume(volume);
     },
     
 }
