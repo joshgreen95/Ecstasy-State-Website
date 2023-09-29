@@ -84,17 +84,8 @@ export default function ThreeScene() {
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));    
         }
 
-        function leftClick(){
-            SoundManager.PlayTrack(0);
-        }
-
-        function keyPress(){
-            SoundManager.Skip();
-        }
-
-        window.addEventListener('click', leftClick);
         window.addEventListener('resize', Resize);
-        window.addEventListener('keypress', keyPress);
+        
 
 /**
  *  Loop

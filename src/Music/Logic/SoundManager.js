@@ -28,6 +28,7 @@ const SoundManager = {
 
         this.audioLoader = new THREE.AudioLoader();
         this.audioAnalyzer = new THREE.AudioAnalyser(this.music);
+
         this.currentTrackName = this.tracklist[this.currentlyPlayingID ? this.currentlyPlayingID : 0];
     },
 
@@ -36,12 +37,9 @@ const SoundManager = {
 
         this.audioLoader.load(this.tracklist[trackID], (buffer) => {
             this.music.setBuffer(buffer);
+            this.currentlyPlayingID = trackID;
+            this.Play();
         });
-
-        this.currentlyPlayingID = trackID;
-        this.currentTrackName = this.tracklist[this.currentlyPlayingID].toString();
-        
-        this.Play();
     },
 
     Skip(){
@@ -56,7 +54,13 @@ const SoundManager = {
     },
 
     Play(){
-        this.music.play();
+        if(this.currentlyPlayingID === null){
+            console.log('no track loaded');
+            this.PlayTrack(0);
+        } else {
+            console.log('Skipping load track');
+            this.music.play();
+        }
     },
 
     Pause(){
@@ -92,7 +96,7 @@ const SoundManager = {
 
     SetVolume(volume){
         console.log(volume);
-        //this.music.setVolume(volume);
+        this.music.setVolume(volume);
     },
     
 }

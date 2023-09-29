@@ -39,14 +39,14 @@ export default function MediaPlayer(){
                     <input type='range' min={0} max={1} defaultValue={0.5} step={0.05} value={volumeSlider}
                         className='slider' id='volumeSlider' 
                         onChange={(event) =>{
-                        let value = event.target.value;
+                        let volume = event.target.value;
                         
-                        if(value == 0){
+                        if(volume === 0){
                             console.log('Muted');
                             setMuted(true);
                         }
-
-                        SoundManager.SetVolume(value);
+                        setVolumeSlider(volume);
+                        SoundManager.SetVolume(volume);
                     }} />
 
             {(isMuted ? 
