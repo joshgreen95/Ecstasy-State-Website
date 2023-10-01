@@ -7,30 +7,49 @@ import { SoundManager } from '../../Music/Logic/SoundManager';
 
 //Components
 export default function MediaPlayer(){
+    const [clock, setClock] = useState(Date.now());
     const [ trackName , updateTrackName ] = useState(); 
     const [ isMuted, setMuted] = useState(false);
     const [ isPlaying, setIsPlaying] = useState(false);
     const [ volumeSlider, setVolumeSlider] = useState(0.5);
 
     useEffect(() => {
-            updateTrackName(SoundManager.currentTrackName);
-    }, 0);
+        const interval = setInterval(() => setClock(Date.now()), 1000);
+        console.log(clock);
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
+
+    useEffect(() => {
+    },);
 
     return(
         <div className='mediaPlayer'>
             <h1>{trackName}</h1>
             
+            <button onClick={() => {
+                SoundManager.Back();
+            }}>Back</button>
+
             {(isPlaying ?  
                     <button onClick={() => {
-                        SoundManager.Stop();
-                        setIsPlaying(false);
-                    }}>Stop</button>
+                    SoundManager.Pause();
+                    }}>Pause</button>
                 :             
                     <button onClick={() => {
-                        SoundManager.Play();
-                        setIsPlaying(true);
+                    SoundManager.Play(setIsPlaying);
                     }}>Play</button>
             )}
+
+            <button onClick={() => {
+                SoundManager.Stop(setIsPlaying);
+            }}>Stop</button>
+
+
+            <button onClick={() => {
+                SoundManager.Skip();
+            }}>Skip</button>
 
 
             <div className='volumeControls'> 
