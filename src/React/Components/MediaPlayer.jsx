@@ -7,26 +7,17 @@ import { SoundManager } from '../../Music/Logic/SoundManager';
 
 //Components
 export default function MediaPlayer(){
-    const [clock, setClock] = useState(Date.now());
-    const [ trackName , updateTrackName ] = useState(); 
     const [ isMuted, setMuted] = useState(false);
     const [ isPlaying, setIsPlaying] = useState(false);
     const [ volumeSlider, setVolumeSlider] = useState(0.5);
 
     useEffect(() => {
-        const interval = setInterval(() => setClock(Date.now()), 1000);
-        console.log(clock);
-        return () => {
-            clearInterval(interval);
-        };
-    }, []);
-
-    useEffect(() => {
-    },);
+        SoundManager.Initialize(setIsPlaying);
+    }, )
 
     return(
         <div className='mediaPlayer'>
-            <h1>{trackName}</h1>
+            <h1 id='trackTitle'></h1>
             
             <button onClick={() => {
                 SoundManager.Back();
@@ -38,12 +29,12 @@ export default function MediaPlayer(){
                     }}>Pause</button>
                 :             
                     <button onClick={() => {
-                    SoundManager.Play(setIsPlaying);
+                    SoundManager.Play();
                     }}>Play</button>
             )}
 
             <button onClick={() => {
-                SoundManager.Stop(setIsPlaying);
+                SoundManager.Stop();
             }}>Stop</button>
 
 
@@ -55,15 +46,18 @@ export default function MediaPlayer(){
             <div className='volumeControls'> 
                 <div className='sliderContainer'>
                     
-                    <input type='range' min={0} max={1} defaultValue={0.5} step={0.05} value={volumeSlider}
+                    <input type='range' min={0} max={1} step={0.05} value={volumeSlider}
                         className='slider' id='volumeSlider' 
                         onChange={(event) =>{
                         let volume = event.target.value;
                         
-                        if(volume === 0){
+                        if(volume == 0){
                             console.log('Muted');
                             setMuted(true);
+                        } else {
+                            setMuted(false);
                         }
+
                         setVolumeSlider(volume);
                         SoundManager.SetVolume(volume);
                     }} />

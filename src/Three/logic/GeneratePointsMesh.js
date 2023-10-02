@@ -10,7 +10,6 @@ function GeneratePointsMesh(ammount, scale, seperation){
     let i = 0; let j = 0;
     for (let ix = 0; ix < ammount; ix++){
         for (let iy = 0; iy < ammount; iy++){
-            console.log(((ix * seperation) - ((ammount * seperation) / 2)));
             positions[i] = ((ix * seperation) - ((ammount * seperation) /2));
             positions[i + 1] = 0;
             positions[i + 2] = (iy * seperation) - ((ammount * seperation) /2);
@@ -20,7 +19,6 @@ function GeneratePointsMesh(ammount, scale, seperation){
             j ++;
         } 
     }
-    console.log(positions);
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute('scale', new THREE.Float32BufferAttribute(scales));

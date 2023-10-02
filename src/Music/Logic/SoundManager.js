@@ -1,10 +1,8 @@
 //core
 import * as THREE from 'three';
 
-//Music
-import track1 from '../Qure - Gaia (Original Mix).wav';
-import track2 from '../Qure - Python (Original Mix).wav';
-import track3 from '../Qure - Uranus (Original Mix).wav';
+//Logic
+import { SoundCache } from './SoundCache.js';
 
 const SoundManager = {
     listener: null,
@@ -13,48 +11,63 @@ const SoundManager = {
     
     audioAnalyzer: null,
 
-    tracklist: [ track1, track2, track3 ],
+    tracklist: null,
     currentlyPlayingID: null,
     isLoading: true,
     
     reactSetIsPlaying: null,
+    reactTitleElement: null,
 
     lastVolume: null,
     defaultVolume: 0.5,
 
-    Initialize(){  
-        this.listener = new THREE.AudioListener();
-        
-        this.music = new THREE.Audio(this.listener);
-        this.music.setVolume(this.defaultVolume);
+    Initialize(setIsPlaying){  
+        if(!this.listener){
+            this.listener = new THREE.AudioListener();
+        }
 
-        this.audioLoader = new THREE.AudioLoader();
-        this.audioAnalyzer = new THREE.AudioAnalyser(this.music);
+        if(!this.music){
+            this.music = new THREE.Audio(this.listener);
+            this.music.setVolume(this.defaultVolume);
+        }
 
-        this.currentTrackName = this.tracklist[this.currentlyPlayingID ? this.currentlyPlayingID : 0];
+        if(!this.audioLoader){
+            this.audioLoader = new THREE.AudioLoader();
+        }
+
+        if(!this.audioAnalyzer){
+            this.audioAnalyzer = new THREE.AudioAnalyser(this.music);
+        }
+
+        this.tracklist = SoundCache;
+
+        this.reactSetIsPlaying = setIsPlaying;
+        console.log(this.reactSetIsPlaying);
+        this.reactTitleElement = document.getElementById('trackTitle');
 
         this.isLoading = false;
-        console.log(`IsLoading: ${this.isLoading}`);
     },
 
     PlayTrack(trackID){
+        console.log(this.tracklist[trackID].track);
+        
         this.music.stop();
         this.currentlyPlayingID = trackID;
-        
-        this.audioLoader.load(this.tracklist[trackID], (buffer) => {
+        this.reactTitleElement.innerHTML = this.tracklist[trackID].trackName;
+
+        this.audioLoader.load(this.tracklist[trackID].track, (buffer) => {
             this.isLoading = false;
             this.reactSetIsPlaying(true);
-            
+
+            this.music.onEnded(() => {
+                this.Skip();
+            })
             this.music.setBuffer(buffer);
             this.Play();
         });
     },
 
-    Skip(setIsPlaying){
-        if (!this.reactSetIsPlaying) {
-            this.reactSetIsPlaying = setIsPlaying;
-        }
-        
+    Skip(){
         if (this.isLoading) {
             console.log('Currently Loading --- Cancelling Action')
             return;
@@ -72,11 +85,7 @@ const SoundManager = {
         }
     },
 
-    Play(setIsPlaying){
-        if(!this.reactSetIsPlaying){
-            this.reactSetIsPlaying = setIsPlaying;
-        }
-
+    Play(){
         if (this.isLoading) { 
             console.log('Currently Loading --- Cancelling Action')
             return; 
@@ -99,13 +108,15 @@ const SoundManager = {
         this.reactSetIsPlaying(false);
     },
     
-    Stop(setIsPlaying){
-        if (!this.reactSetIsPlaying) {
-            this.reactSetIsPlaying = setIsPlaying;
+    Stop(){
+        if (this.isLoading) {
+            console.log('Currently Loading --- Cancelling Action')
+            return;
         }
-        
+
         this.music.stop();
         this.currentlyPlayingID = null;
+        this.reactTitleElement.innerHTML = '';
         this.reactSetIsPlaying(false);
     },
 
@@ -138,7 +149,8 @@ const SoundManager = {
 
     Back(){
         console.log(this.music);
-    }
+        console.log(this.tracklist[0].track);
+    },
     
 }
 
