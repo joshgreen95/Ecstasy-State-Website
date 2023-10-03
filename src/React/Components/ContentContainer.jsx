@@ -2,18 +2,14 @@
 import React from 'react'
 
 //Components
-import ContentWindow from './ContentWindow.jsx'
+import GeneratedContent from '../logic/GeneratedContent.jsx'
 
-//BlogPost
-import TestPost from '../BlogPosts/TestPost.jsx'
-import TestPost2 from '../BlogPosts/TestPost2.jsx'
+import { testPost } from './TestContentObject.js'
 
 export default function ContentContainer() {
   return (
     <div className='contentContainer'>
-        <ContentWindow content={TestPost} />
-
-        <ContentWindow content={TestPost2} />
+        <GeneratedContent content={testPost}/>
     </div>
   )
 }
