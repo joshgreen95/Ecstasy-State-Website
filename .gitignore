@@ -1,26 +1,47 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+ecstasy-state-website/node_modules
+ecstasy-state-website/.pnp
+ecstasy-state-website/.pnp.js
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+ecstasy-state-website/# testing
+ecstasy-state-website/coverage
 
-# testing
-/coverage
+ecstasy-state-website/# production
+ecstasy-state-website/build
 
-# production
-/build
+ecstasy-state-website/# misc
+ecstasy-state-website/.DS_Store
+ecstasy-state-website/.env.local
+ecstasy-state-website/.env.development.local
+ecstasy-state-website/.env.test.local
+ecstasy-state-website/.env.production.local
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+ecstasy-state-website/npm-debug.log*
+ecstasy-state-website/yarn-debug.log*
+ecstasy-state-website/yarn-error.log*
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+ecstasy-state-cms/package.json
+ecstasy-state-cms/package-lock.json
 
-package.json
-package-lock.json
+ecstasy-state-cms/node_modules
+ecstasy-state-cms/.pnp
+ecstasy-state-cms/.pnp.js
+
+ecstasy-state-cms/# testing
+ecstasy-state-cms/coverage
+
+ecstasy-state-cms/# production
+ecstasy-state-cms/build
+
+ecstasy-state-cms/# misc
+ecstasy-state-cms/.DS_Store
+ecstasy-state-cms/.env.local
+ecstasy-state-cms/.env.development.local
+ecstasy-state-cms/.env.test.local
+ecstasy-state-cms/.env.production.local
+
+ecstasy-state-cms/npm-debug.log*
+ecstasy-state-cms/yarn-debug.log*
+ecstasy-state-cms/yarn-error.log*
+
+ecstasy-state-cms/package.json
+ecstasy-state-cms/package-lock.json
