@@ -45,3 +45,7 @@ ecstasy-state-cms/yarn-error.log*
 
 ecstasy-state-cms/package.json
 ecstasy-state-cms/package-lock.json
+
+
+ecstasy-state-website/.env
+ecstasy-state-cms/.env
