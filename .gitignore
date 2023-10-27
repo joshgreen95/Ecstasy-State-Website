@@ -19,9 +19,6 @@ ecstasy-state-website/npm-debug.log*
 ecstasy-state-website/yarn-debug.log*
 ecstasy-state-website/yarn-error.log*
 
-ecstasy-state-cms/package.json
-ecstasy-state-cms/package-lock.json
-
 ecstasy-state-cms/node_modules
 ecstasy-state-cms/.pnp
 ecstasy-state-cms/.pnp.js
