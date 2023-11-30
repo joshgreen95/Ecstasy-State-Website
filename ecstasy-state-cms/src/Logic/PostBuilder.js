@@ -3,8 +3,10 @@ import { db } from '../Firebase/Firebase.js';
 
 class Post{
     constructor(){
+        this.postID = crypto.randomUUID();
         this.componentArray = [];
         this.post = {};
+        this.postImages = [];
     }
 
     get postArray(){
@@ -50,6 +52,7 @@ class Post{
 
         try {
             const docRef = await addDoc(collection(db, "post"), {
+                'postID': this.postID,
                 'post': jsonContent
             });
 
